@@ -77,3 +77,10 @@ The creation of a KV is ment to be dumb long because then a api user will refact
 | **Can make advanced queries** | No | Yes | Yes | No |
 | **Serverless & C-less** (no imported c code) | Yes | Yes | No *(Most projects imports c code and thus adding complexity to a program)* | Yes |
 | **Code size** | Small | Medium | Huge | Huge |
+
+## But why this over something like gorm combined with sqlite
+Mostly personal preference, gorm is an amazing library but has some major limitations that remove the fun working with it for me at least.  
+- You cannot use maps *(In this library you can)*
+- Every nested struct is a database table and thus every nested struct needs an ID with as result you need to reference the orignal struct in the nested one, WHAAAA this is soo dumb *(This library doesn't create a new collection for every struct)*
+- The oldschool sql relations makes it so you need to inform gorm about how tables are called when joined *(Here you don't have to because there are no relations)*
+- Your code needs to match sql's way of thinking, sounds dumb but you can't just start creating structs and gorm will figure out the relations as long as there is a gorm.m, You can arguee that this is for the good and i agree if you are running a sql database but that's exacly my problem i don't want a sql database because of these problems.
