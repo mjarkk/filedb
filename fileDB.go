@@ -83,38 +83,42 @@ func (db *DB) location(add ...string) string {
 }
 
 func getHexOf(in interface{}) string {
-	hexVal := ""
+	str := ""
+
 	switch typeVal := in.(type) {
+	case []byte:
+		return hex.EncodeToString(typeVal)
 	case string:
-		hexVal = strToHex(typeVal)
+		str = typeVal
 	case int:
-		hexVal = strToHex(strconv.Itoa(typeVal))
+		str = strconv.Itoa(typeVal)
 	case int8:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case int16:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case int32:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case int64:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case uint:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case uint8:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case uint16:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case uint32:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case uint64:
-		hexVal = strToHex(strconv.Itoa(int(typeVal)))
+		str = strconv.Itoa(int(typeVal))
 	case bool:
 		if typeVal {
-			hexVal = strToHex("true")
+			str = "true"
 		} else {
-			hexVal = strToHex("false")
+			str = "false"
 		}
 	}
-	return hexVal
+
+	return strToHex(str)
 }
 
 // Save creates or updates a database entry
@@ -466,7 +470,7 @@ func (db *DB) checkStruct(in interface{}, checkCollection, resolverSlice bool) (
 			}
 		}
 		if !found {
-			return res, errors.New(res.objName + " not found in collection and thus invalid, make sure to add it to the index")
+			return res, fmt.Errorf("%s not whitelisted, make sure to whitelist %s or check the whitelisting errors", res.objName, res.objName)
 		}
 	}
 
@@ -564,6 +568,7 @@ func (db *DB) Whitelist(in interface{}, searchKeys ...KV) error {
 		indexKeys[i] = kv.key
 	}
 	indexKeys = append(indexKeys, "M.ID") // Add M.ID by default
+
 	db.collections[res.objName] = collection{
 		indexKeys: indexKeys,
 		folder:    res.dbFolder,
