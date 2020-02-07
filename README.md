@@ -11,7 +11,8 @@ NOTE: This is probebly not a stable database and thus you should not use this in
 
 ## Limitations
 - You cannot make OR queries nor make complicated number queries like greather than, etc...
-- If you have a slow shitty harddrive this won't work well
+- The db is currently really dependent on the file system so if the fs is shitty or the hardware this db wont work well
+- Every object is stored as json using go's json package so the json field tag will be used what might cause some problems
 
 ## Get started
 ```go
@@ -19,12 +20,18 @@ func main() {
 	db, err := filedb.NewDB("db")
 	handleErr(err)
 
+	type User struct{
+		fileDB.M
+		Username string `json:"Username"`
+		Password string `json:"Password"`
+	}
+
 	// Set the search keys
 	userKV := filedb.NewKV("Username")
 	passKV := filedb.NewKV("Password")
 
 	// Add database
-	err = db.Whitlist(
+	err = db.Whitelist(
 		&User{},
 		passKV,
 		userKV,

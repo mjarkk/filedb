@@ -472,10 +472,10 @@ func (db *DB) checkStruct(in interface{}, checkCollection, resolverSlice bool) (
 	return res, nil
 }
 
-// Whitlist whitelists a struct to be allowed inside the database
+// Whitelist Whitelists a struct to be allowed inside the database
 // This also adds searchKeys so the struct can be searched for,
 // M.ID is automatily always added as search key
-func (db *DB) Whitlist(in interface{}, searchKeys ...KV) error {
+func (db *DB) Whitelist(in interface{}, searchKeys ...KV) error {
 	res, err := db.checkStruct(in, false, false)
 	if err != nil {
 		return err

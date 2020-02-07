@@ -29,7 +29,7 @@ func main() {
 	passKV := filedb.NewKV("Password")
 
 	// Add database
-	err = db.Whitlist(
+	err = db.Whitelist(
 		&User{},
 		passKV,
 		userKV,
