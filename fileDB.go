@@ -262,12 +262,13 @@ func keysMatchName(fileName string, keyValues []string) bool {
 
 // Delete removes an item from the database
 //
-// NOTE 1: It's currently not possible to delete a slice of items though
-//         if you input a struct with for example a name it will remove
-//         all items that contain that name
+// NOTE: It's currently not possible to delete a slice of items though
+//       it will delete ALL items matching a set struct field expect
+//       if ID is set then only 1 will be removed and all
+//       other fields will be ignored
 //
-// NOTE 2: If the input struct has a filledin M.ID all other fields will
-//         be ignored
+// NOTE: If the input struct has a filledin M.ID all other fields will
+//       be ignored
 func (db *DB) Delete(in interface{}) error {
 	res, err := db.checkStruct(in, true, false)
 	if err != nil {
