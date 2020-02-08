@@ -11,6 +11,31 @@ import (
 	"strings"
 )
 
+// WhiteListEntry is one item to whitelist in the WhiteListGroup function
+type WhiteListEntry struct {
+	Obj        interface{}
+	SearchKeys []KV
+}
+
+// WhiteListGroup whitelists multiple items
+// Handy if you have a lot of structs to whitelist
+func (db *DB) WhiteListGroup(toWhitelist []WhiteListEntry) error {
+	if toWhitelist == nil {
+		return nil
+	}
+	for _, item := range toWhitelist {
+		searchKeys := []KV{}
+		if item.SearchKeys != nil {
+			searchKeys = item.SearchKeys
+		}
+		err := db.Whitelist(item.Obj, searchKeys...)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Whitelist Whitelists a struct to be allowed inside the database
 // This also adds searchKeys so the struct can be searched for,
 // M.ID is automatily always added as search key
